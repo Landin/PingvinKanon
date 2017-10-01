@@ -25,11 +25,11 @@ public class PenguinToss : MonoBehaviour
         {
             m_Time += Time.deltaTime;
         }
-		if(Input.GetKeyDown(KeyCode.Mouse0))
+		if(Input.GetKeyDown(KeyCode.Space))
         {
             m_TimerActive = true;
         }
-        else if(Input.GetKeyUp(KeyCode.Mouse0))
+        else if(Input.GetKeyUp(KeyCode.Space))
         {
 
             if (m_Time > m_TimeToFullCharge)
