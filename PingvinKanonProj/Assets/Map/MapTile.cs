@@ -12,7 +12,7 @@ namespace Assets.Map
             Sea,
         }
 
-        public TileType TType { get; set; }
+        public TileType TType;
 
         public MapTile(TileType type = TileType.Sea)
         {

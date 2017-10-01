@@ -9,13 +9,13 @@ namespace Assets.Map
     {
         public const int DefaultWidth = 32;
         public const int DefaultHeight = 24;
-        public int Width { get; set; }
-        public int Height { get; set; }
+        public int Width;
+        public int Height;
 
         private MapTile[,] _mapTiles;
         private Camera _cam;
-        private Sprite _land;
-        private Sprite _sea;
+        private GameObject _land;
+        private GameObject _sea;
 
         MapTile GetTile(int x, int y)
         {
@@ -30,8 +30,10 @@ namespace Assets.Map
         // Use this for initialization
         void Start()
         {
-            _cam = GetComponent<Camera>();
+            _cam = GameObject.FindObjectOfType<Camera>();
             _mapTiles = new MapTile[Width, Height];
+            _land = Resources.Load<GameObject>("Map/Land_placeholder");
+            _sea = Resources.Load<GameObject>("Map/Sea_placeholder");
             CreateTiles();
             PlaceTiles();
         }
@@ -42,26 +44,22 @@ namespace Assets.Map
             {
                 for (int j = 0; j < Height; ++j)
                 {
-                    GameObject tileObj = new GameObject();
-                    tileObj.AddComponent<MapTile>();
-                    tileObj.AddComponent<SpriteRenderer>();
-
-                    MapTile t = tileObj.GetComponent<MapTile>();
-                    SpriteRenderer sr = tileObj.GetComponent<SpriteRenderer>();
-                    switch (t.TType)
+                    GameObject obj;
+                    MapTile.TileType tileType = MapTile.TileType.Land;
+                    switch (tileType)
                     {
                         case MapTile.TileType.Land:
-                            sr.color = Color.green;
-                            sr.size = new Vector2(32, 32);
-                            sr.sprite = _land;
+                            obj = Instantiate(_land);
                             break;
                         case MapTile.TileType.Sea:
-                            sr.color = Color.blue;
-                            sr.size = new Vector2(32, 32);
-                            sr.sprite = _sea;
+                            obj = Instantiate(_sea);
+                            break;
+                        default:
+                            obj = Instantiate(_sea);
                             break;
                     }
-
+                    MapTile t = obj.AddComponent<MapTile>();
+                    t.TType = tileType;
                     SetTile(i, j, t);
                 }
             }
@@ -74,7 +72,8 @@ namespace Assets.Map
                 for (int y = 0; y < Height; ++y)
                 {
                     MapTile t = GetTile(x, y);
-                    t.gameObject.transform.position = _cam.ViewportToWorldPoint(new Vector2(x * 1.0f / Width, y * 1.0f / Height));
+                    Vector2 position = new Vector2((float)x / Width, (float)y / Height);
+                    t.gameObject.transform.position = _cam.ViewportToWorldPoint(position);
                 }
             }
         }

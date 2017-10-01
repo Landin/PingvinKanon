@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
-    private float speed = 3;
+    public float Speed;
 
-    public Bounds bounds { get; set; }
+    public Bounds Bounds;
 
     // Use this for initialization
     void Start()
     {
-        speed = 3;
-        bounds = new Bounds(Vector2.zero, new Vector2(10, 10));
+        Speed = 3;
+        Bounds = new Bounds(Vector2.zero, new Vector2(10, 10));
     }
 
     // Update is called once per frame
@@ -21,7 +21,7 @@ public class PlayerControl : MonoBehaviour
         float axisX = Input.GetAxis("Horizontal");
         float axisY = Input.GetAxis("Vertical");
 
-        Vector2 move = new Vector2(axisX, axisY) * Time.deltaTime * speed;
+        Vector2 move = new Vector2(axisX, axisY) * Time.deltaTime * Speed;
         Vector2 pos = transform.position;
 
         move = BoundedMove(pos, move);
@@ -33,25 +33,25 @@ public class PlayerControl : MonoBehaviour
     {
         Vector2 result = new Vector2(move.x, move.y);
         Vector2 modifiedPos = position + move;
-        if (!bounds.Contains(modifiedPos))
+        if (!Bounds.Contains(modifiedPos))
         {
             // Move to the edge if full move would move out of bounds
-            if (modifiedPos.x > bounds.max.x)
+            if (modifiedPos.x > Bounds.max.x)
             {
-                result.x = bounds.max.x - position.x;
+                result.x = Bounds.max.x - position.x;
             }
-            else if (modifiedPos.x < bounds.min.x)
+            else if (modifiedPos.x < Bounds.min.x)
             {
-                result.x = bounds.min.x - position.x;
+                result.x = Bounds.min.x - position.x;
             }
 
-            if (modifiedPos.y > bounds.max.y)
+            if (modifiedPos.y > Bounds.max.y)
             {
-                result.y = bounds.max.y - position.y;
+                result.y = Bounds.max.y - position.y;
             }
-            else if (modifiedPos.y < bounds.min.y)
+            else if (modifiedPos.y < Bounds.min.y)
             {
-                result.y = bounds.min.y - position.y;
+                result.y = Bounds.min.y - position.y;
             }
         }
         return result;
