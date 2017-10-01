@@ -11,8 +11,6 @@ public class PlayerControl : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Speed = 3;
-        Bounds = new Bounds(Vector2.zero, new Vector2(10, 10));
     }
 
     // Update is called once per frame
