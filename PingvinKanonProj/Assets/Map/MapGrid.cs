@@ -67,12 +67,13 @@ namespace Assets.Map
 
         void PlaceTiles()
         {
+            _cam = FindObjectOfType<Camera>();
             for (int x = 0; x < Width; ++x)
             {
                 for (int y = 0; y < Height; ++y)
                 {
                     MapTile t = GetTile(x, y);
-                    Vector2 position = new Vector2((float)x / Width, (float)y / Height);
+                    Vector3 position = new Vector3((float)x / Width, (float)y / Height, -_cam.transform.position.z);
                     t.gameObject.transform.position = _cam.ViewportToWorldPoint(position);
                 }
             }
@@ -81,7 +82,6 @@ namespace Assets.Map
         // Update is called once per frame
         void Update()
         {
-
         }
     }
 }
