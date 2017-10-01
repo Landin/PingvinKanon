@@ -7,15 +7,15 @@ namespace Assets.Map
 {
     public class MapGrid : MonoBehaviour
     {
-        public const int DefaultWidth = 32;
-        public const int DefaultHeight = 24;
         public int Width;
         public int Height;
+        public int LandTileRows;
 
         private MapTile[,] _mapTiles;
         private Camera _cam;
         private GameObject _land;
         private GameObject _sea;
+        private GameObject _shore;
 
         MapTile GetTile(int x, int y)
         {
@@ -34,6 +34,7 @@ namespace Assets.Map
             _mapTiles = new MapTile[Width, Height];
             _land = Resources.Load<GameObject>("Map/Land_placeholder");
             _sea = Resources.Load<GameObject>("Map/Sea_placeholder");
+            _shore = Resources.Load<GameObject>("Map/Shore_placeholder");
             CreateTiles();
             PlaceTiles();
         }
@@ -45,14 +46,17 @@ namespace Assets.Map
                 for (int j = 0; j < Height; ++j)
                 {
                     GameObject obj;
-                    MapTile.TileType tileType = MapTile.TileType.Land;
+                    MapTile.TileType tileType = i < LandTileRows ? MapTile.TileType.Land : MapTile.TileType.Sea;
                     switch (tileType)
                     {
                         case MapTile.TileType.Land:
                             obj = Instantiate(_land);
                             break;
                         case MapTile.TileType.Sea:
-                            obj = Instantiate(_sea);
+                            if (i > 0 && GetTile(i - 1, j).TType == MapTile.TileType.Land)
+                                obj = Instantiate(_shore);
+                            else
+                                obj = Instantiate(_sea);
                             break;
                         default:
                             obj = Instantiate(_sea);

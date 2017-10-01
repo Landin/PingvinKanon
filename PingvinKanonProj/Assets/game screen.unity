@@ -226,6 +226,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Width: 32
   Height: 24
+  LandTileRows: 6
 --- !u!4 &1525585305
 Transform:
   m_ObjectHideFlags: 0

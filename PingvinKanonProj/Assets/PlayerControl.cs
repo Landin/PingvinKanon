@@ -6,7 +6,7 @@ public class PlayerControl : MonoBehaviour
 {
     public float Speed;
 
-    public Bounds Bounds;
+    public Bounds BoundingBox;
 
     // Use this for initialization
     void Start()
@@ -30,28 +30,31 @@ public class PlayerControl : MonoBehaviour
     Vector2 BoundedMove(Vector2 position, Vector2 move)
     {
         Vector2 result = new Vector2(move.x, move.y);
-        Vector2 modifiedPos = position + move;
-        if (!Bounds.Contains(modifiedPos))
+        Bounds spriteBounds = gameObject.GetComponent<SpriteRenderer>().bounds;
+        Vector3 min = spriteBounds.min + new Vector3(move.x, move.y);
+        Vector3 max = spriteBounds.max + new Vector3(move.x, move.y);
+
+        if (!BoundingBox.Contains(max) || !BoundingBox.Contains(min))
         {
-            // Move to the edge if full move would move out of bounds
-            if (modifiedPos.x > Bounds.max.x)
+            if (max.x > BoundingBox.max.x)
             {
-                result.x = Bounds.max.x - position.x;
+                result.x = BoundingBox.max.x - max.x;
             }
-            else if (modifiedPos.x < Bounds.min.x)
+            else if (min.x < BoundingBox.min.x)
             {
-                result.x = Bounds.min.x - position.x;
+                result.x = BoundingBox.min.x - min.x;
             }
 
-            if (modifiedPos.y > Bounds.max.y)
+            if (max.y > BoundingBox.max.y)
             {
-                result.y = Bounds.max.y - position.y;
+                result.y = BoundingBox.max.y - max.y;
             }
-            else if (modifiedPos.y < Bounds.min.y)
+            else if (min.y < BoundingBox.min.y)
             {
-                result.y = Bounds.min.y - position.y;
+                result.y = BoundingBox.min.y - min.y;
             }
         }
+        // Move to the edge if full move would move out of bounds
         return result;
     }
 }
